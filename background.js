@@ -1,5 +1,4 @@
 const GITHUB_URL = "https://*.github.com/*";
-const urlRegex = RegExp(GITHUB_URL, "g");
 
 const setUpScript = (tabId) => {
   chrome.tabs.executeScript(tabId, {
@@ -9,8 +8,13 @@ const setUpScript = (tabId) => {
 
 chrome.tabs.onUpdated.addListener((tabId, tabInfo, tab) => {
   const { url } = tab;
+  const isGithubUrl = /https:\/\/github\.com\/.*/i.test(url);
 
-  if (tabInfo.status !== "complete" || !urlRegex.test(url)) {
+  if (tabInfo.status === "complete") {
+    console.log(isGithubUrl);
+    console.dir(url);
+  }
+  if (tabInfo.status !== "complete" || !isGithubUrl) {
     return;
   }
 

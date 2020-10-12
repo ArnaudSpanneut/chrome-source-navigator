@@ -1,6 +1,6 @@
 {
   "name": "Github JS/TS file navigation",
-  "version": "1.0",
+  "version": "1.1",
   "description": "Navigate through imported file in javascript files",
   "permissions": ["tabs", "https://*.github.com/*"],
   "background": {

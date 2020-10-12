@@ -1,7 +1,10 @@
+const FILE_TYPES = ["ts", "js", "tsx", "jsx"];
+const OTHER_FILES_TYPES = ["html", "css"];
+
 const jsContent = document.getElementsByClassName("js-file-line-container")[0];
 const blocCodes = Array.from(jsContent.getElementsByClassName("blob-code"));
 
-const FILE_TYPES = ["ts", "js", "tsx", "jsx"];
+const otherFilesRegex = RegExp(`(.*)\.(${OTHER_FILES_TYPES.join("|")})`, "g");
 
 const checkInternalLink = (link) => link.includes("/");
 const checkImportLine = ({ textContent }) =>
@@ -37,14 +40,14 @@ const importBlocs = blocCodes
     if (!blocSource || !checkInternalLink(blocSource.textContent)) {
       return;
     }
-
     const href = blocSource.textContent.toString().replace(/\'/g, "");
+
     const fileName = href.slice(href.lastIndexOf("/") + 1);
+    const hasNotToCheck = otherFilesRegex.test(fileName);
+    const url = hasNotToCheck ? href : await getFileUrl(href);
     const link = document.createElement("a");
 
     try {
-      const url = fileName.includes(".") ? href : await getFileUrl(href);
-
       link.textContent = href;
       link.href = url;
 
